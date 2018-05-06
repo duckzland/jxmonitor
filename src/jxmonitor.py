@@ -8,7 +8,7 @@ from modules.utility import printLog
 from entities.layout import *
 from entities.threads import *
 
-import sys, time
+import sys, time, os
 
 
 def main():
@@ -34,6 +34,7 @@ def main():
 
     finally:
         printLog('Exiting monitoring program', 'success')
+        os._exit(1)
 
 def shutdown():
 
@@ -54,7 +55,6 @@ def shutdown():
     finally:
         printLog("Closing open threads", status)
 
-    sys.exit(0)
 
 if __name__ == "__main__":
     main()
