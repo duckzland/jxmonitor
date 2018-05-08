@@ -1,4 +1,4 @@
-import os, urwid
+import os, urwid, re, string
 from datetime import datetime
 
 def printLog(text, status = 'info'):
@@ -34,8 +34,27 @@ def printLog(text, status = 'info'):
 
 
 
+def safe_str(obj):
+    """ return the byte string representation of obj """
+    try:
+        return str(obj)
+    except UnicodeEncodeError:
+        # obj is unicode
+        return unicode(obj).encode('unicode_escape')
+
+
+def safe_unicode(obj, *args):
+    """ return the unicode representation of obj """
+    try:
+        return unicode(obj, *args)
+    except UnicodeDecodeError:
+        # obj is byte string
+        ascii_text = str(obj).encode('string_escape')
+        return unicode(ascii_text)
+
 
 def printText(raw_text):
+
     color_list = [
         'black',
         'dark red',
@@ -54,6 +73,7 @@ def printText(raw_text):
         'light cyan',
         'white'
     ]
+
     formated_text = []
     raw_text = str(raw_text)
     raw_text = raw_text.decode("utf-8")
@@ -64,8 +84,13 @@ def printText(raw_text):
         except:
             attr = '0'
             text = at.split("m",1)
-
-        list_attr = [ int(i) for i in attr.split(';') ]
+        list_attr = []
+        for i in attr.split(';'):
+            i = re.sub("[^0-9]", "", i)
+            i = i.lstrip('0')
+            if i == '':
+                i = '0'
+            list_attr.append(int(i))
         list_attr.sort()
         fg = -1
         bg = -1

@@ -35,8 +35,19 @@ class Logger(Widget):
     def processText(self, text):
         if isinstance(text, str):
             return text
-        text = ''.join(text)
-        # Strip date time
-        text = re.sub(r'\[\d+\-\d+\-\d+ \d+:\d+:\d+\]', '-', text)
-        return printText(text)
+        try:
+            text = ''.join(text)
+            text = re.sub(r'\[\d+\-\d+\-\d+ \d+:\d+:\d+\]', '-', text)
+
+            # Ethminer special text
+            text = re.sub(r'(?:  m | cu )', '+', text)
+            text = re.sub(r'\d+:\d+:\d+\|\w+\|  ', '', text)
+            try:
+                text = printText(text)
+            except Exception as e:
+                print e
+        except:
+            pass
+
+        return text
                 

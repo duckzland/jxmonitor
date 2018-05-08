@@ -65,10 +65,11 @@ class Widget:
         if color:
             text = (color, text)
 
-        if keyword in self.maps:
-            self.maps[keyword].set_text(text)
-        else:
-            self.maps[keyword] = urwid.Text(text)
+        if text:
+            if keyword in self.maps:
+                self.maps[keyword].set_text(text)
+            else:
+                self.maps[keyword] = urwid.Text(text)
 
 
 

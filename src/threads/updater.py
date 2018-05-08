@@ -21,11 +21,12 @@ class Updater(Thread):
 
 
     def init(self):
-        self.job = Job(0.2, self.update)
         self.active = True
+        self.job = Job(1, self.update)
 
 
     def update(self, runner):
+        retries = 3
         if self.active:
             try:
                 if self.connection == False:
@@ -43,56 +44,73 @@ class Updater(Thread):
                 if self.transfer != False:
                     packet = self.transfer.recv()
                     if not packet:
-                        raise
+                        if retries > 0:
+                            time.sleep(1)
+                            retries = retries - 1
+                        else:
+                            raise
+
                     self.buffers = packet
 
-                if self.layout.viewReady:
-                    self.layout.view.update(self.buffers)
+                # Don't handle layout problems
+                try:
+                    if self.layout.viewReady:
+                        self.layout.view.update(self.buffers)
 
-                if self.layout.loopReady:
-                    self.layout.loop.draw_screen()
+                    if self.layout.loopReady:
+                        self.layout.loop.draw_screen()
+                except:
+                    pass
 
             except:
                 self.connection = False
                 self.transfer = False
-                if self.layout.viewReady:
-                    self.layout.view.update('')
 
-                if self.layout.loopReady:
-                    self.layout.loop.draw_screen()
+                # Don't handle layout problems
+                try:
+                    if self.layout.viewReady:
+                        self.layout.view.update('')
+
+                    if self.layout.loopReady:
+                        self.layout.loop.draw_screen()
+                except:
+                    pass
+
                 time.sleep(10)
 
 
     def stop(self, force = False):
-        try:
-            if self.transfer != False:
-                self.transfer.send('close')
-                self.transfer.wait()
-                self.transfer.close()
-                self.transfer = False
+        if self.active:
+            try:
+                if self.transfer != False:
+                    self.transfer.send('close')
+                    self.transfer.wait()
+                    self.transfer.close()
+                    self.transfer = False
 
-            if self.connection != False:
-                #self.connection.close()
-                self.connection.shutdown(socket.SHUT_WR)
-                self.connection = False
-        except:
-            pass
+                if self.connection != False:
+                    #self.connection.close()
+                    self.connection.shutdown(socket.SHUT_WR)
+                    self.connection = False
+            except:
+                pass
 
 
     def destroy(self):
-        try:
-            if self.job:
-                self.job.shutdown_flag.set()
-            self.stop()
-            self.active = False
-            status = 'success'
+        if self.active:
+            try:
+                if self.job:
+                    self.job.shutdown_flag.set()
+                self.stop()
+                self.active = False
+                status = 'success'
 
-        except:
-            status = 'error'
+            except:
+                status = 'error'
 
-        finally:
-            self.active = False
-            printLog("Stopping active thread", status)
+            finally:
+                self.active = False
+                printLog("Stopping active thread", status)
 
 
     def extract(self):
