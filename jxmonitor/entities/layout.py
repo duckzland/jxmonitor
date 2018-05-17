@@ -1,12 +1,11 @@
-#!/usr/bin/env python
+import os, sys, urwid, json
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from modules.utility import printLog
 from widgets.summary import Summary
 from widgets.logger import Logger
 from widgets.gpuinfo import GPUInfo
+from modules.utility import printLog
 from collections import OrderedDict
-
-import urwid, json
 
 class LayoutView(urwid.WidgetWrap):
 
@@ -37,7 +36,8 @@ class LayoutView(urwid.WidgetWrap):
             urwid.WidgetWrap.__init__(self, self.mainWindow())
             status = 'success'
 
-        except:
+        except Exception as e:
+            print e
             status = 'error'
 
         finally:

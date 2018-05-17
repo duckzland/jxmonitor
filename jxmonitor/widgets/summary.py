@@ -1,6 +1,6 @@
-import sys, urwid
+import os, sys, urwid
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append('../')
-from modules.utility import bytes2human
 from pprint import pprint
 
 from widget import *
@@ -22,14 +22,14 @@ class Summary(Widget):
             { 'key'    : 'general:active:cpu:pool' },
             { 'key'    : 'miner:hashrate:cpu', 'default': '0' },
             { 'key'    : 'miner:shares:cpu', 'default': '0' },
-            { 'key'    : 'memory:virtual:free', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'memory:virtual:total', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'memory:swap:free', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'memory:swap:total', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'disk:usage:used', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'disk:usage:total', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'network:status:bytes_recv', 'default': '0', 'process': [ bytes2human ] },
-            { 'key'    : 'network:status:bytes_sent', 'default': '0', 'process': [ bytes2human ] },
+            { 'key'    : 'memory:virtual:free', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'memory:virtual:total', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'memory:swap:free', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'memory:swap:total', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'disk:usage:used', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'disk:usage:total', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'network:status:bytes_recv', 'default': '0', 'process': [ self.Bytes2human ] },
+            { 'key'    : 'network:status:bytes_sent', 'default': '0', 'process': [ self.Bytes2human ] },
         ]
 
         self.isDynamicRegistered = False
@@ -84,3 +84,18 @@ class Summary(Widget):
                     self.keywords.append({ 'key' : keyword, 'default': '0.00', 'format': '%s%%', 'process': [ float, int ] })
             self.isDynamicRegistered = True
             self.mapping()
+            
+            
+            
+    def Bytes2human(self, n):
+        symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
+        prefix = {}
+        for i, s in enumerate(symbols):
+            prefix[s] = 1 << (i + 1) * 10
+        for s in reversed(symbols):
+            if n >= prefix[s]:
+                try:
+                    value = float(n) / prefix[s]
+                    return '%.1f%s' % (value, s)
+                except: pass
+        return "%sB" % n

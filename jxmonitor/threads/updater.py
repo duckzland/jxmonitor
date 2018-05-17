@@ -1,5 +1,5 @@
-import sys, pickle, io, select, time, socket, json
-sys.path.append('../')
+import os, sys, pickle, io, select, time, socket, json
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from entities.job import *
 from thread import Thread
 from modules.transfer import *

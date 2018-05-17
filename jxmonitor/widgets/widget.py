@@ -1,7 +1,7 @@
-#!/usr/bin/env python
-import sys, traceback, urwid
-sys.path.append('../')
-from modules.utility import bytes2human
+import os, sys, traceback, urwid
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
 from pprint import pprint
 from collections import OrderedDict
 

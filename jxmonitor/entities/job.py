@@ -1,5 +1,5 @@
-import time, sys, threading, signal
-sys.path.append('../')
+import os, time, sys, threading, signal
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from modules.utility import printLog
 from entities.shutdown import *
 

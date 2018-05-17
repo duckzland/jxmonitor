@@ -3,12 +3,12 @@
 # Main Miner Monitoring
 #####
 
+import sys, time, os
+
 from threads.updater import *
 from modules.utility import printLog
 from entities.layout import *
 from entities.threads import *
-
-import sys, time, os
 
 
 def main():
