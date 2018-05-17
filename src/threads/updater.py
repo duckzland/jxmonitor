@@ -27,56 +27,57 @@ class Updater(Thread):
 
     def update(self, runner):
         retries = 3
-        if self.active:
-            try:
-                if self.connection == False:
-                    host = "127.0.0.1"
-                    port = 8129
-                    self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    self.connection.connect((self.host, self.port))
-
-                if self.transfer == False:
-                    if self.connection != False:
-                        self.transfer = Transfer(self.connection)
-                        self.transfer.send('getStatus')
-
-                self.buffers = ''
-                if self.transfer != False:
-                    packet = self.transfer.recv()
-                    if not packet:
-                        if retries > 0:
-                            time.sleep(1)
-                            retries = retries - 1
-                        else:
-                            raise
-
-                    self.buffers = packet
-
-                # Don't handle layout problems
+        try:
+            self.transfer.send('serverStatus')
+        except:
+            self.connection = False
+            self.transfer = False
+        finally:
+            if self.active:
                 try:
-                    if self.layout.viewReady:
-                        self.layout.view.update(self.buffers)
+                    if self.connection == False:
+                        host = "127.0.0.1"
+                        port = 8129
+                        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        self.connection.connect((self.host, self.port))
 
-                    if self.layout.loopReady:
-                        self.layout.loop.draw_screen()
+                    if self.transfer == False:
+                        if self.connection != False:
+                            self.transfer = Transfer(self.connection)
+                            self.transfer.send('getStatus')
+
+                    self.buffers = ''
+                    if self.transfer != False:
+                        packet = self.transfer.recv()
+                        if not packet:
+                            if retries > 0:
+                                time.sleep(1)
+                                retries = retries - 1
+                            else:
+                                raise
+
+                        self.buffers = packet
+
+                    self.updateLayout(self.buffers)
+
                 except:
-                    pass
+                    self.connection = False
+                    self.transfer = False
+                    self.updateLayout('')
+                    time.sleep(10)
 
-            except:
-                self.connection = False
-                self.transfer = False
 
-                # Don't handle layout problems
-                try:
-                    if self.layout.viewReady:
-                        self.layout.view.update('')
 
-                    if self.layout.loopReady:
-                        self.layout.loop.draw_screen()
-                except:
-                    pass
+    def updateLayout(self, content):
+        try:
+            if self.layout.viewReady:
+                self.layout.view.update(content)
 
-                time.sleep(10)
+            if self.layout.loopReady:
+                self.layout.loop.draw_screen()
+        except:
+            pass
+
 
 
     def stop(self, force = False):
@@ -84,8 +85,6 @@ class Updater(Thread):
             try:
                 if self.transfer != False:
                     self.transfer.send('close')
-                    self.transfer.wait()
-                    self.transfer.close()
                     self.transfer = False
 
                 if self.connection != False:
