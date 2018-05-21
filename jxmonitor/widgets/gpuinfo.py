@@ -129,7 +129,7 @@ class GPUInfo(Widget):
         if data and len(data) > 0:
             for keyword, value in data.iteritems():
 
-                if !value:
+                if not value:
                     value = '0'
 
                 if 'gpu:fan' in keyword:
