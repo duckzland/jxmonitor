@@ -128,6 +128,10 @@ class GPUInfo(Widget):
         GPU = {}
         if data and len(data) > 0:
             for keyword, value in data.iteritems():
+
+                if !value:
+                    value = '0'
+
                 if 'gpu:fan' in keyword:
                     gpu, fan, type, index = keyword.split(':')
                     if index not in GPU:

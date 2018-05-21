@@ -5,6 +5,9 @@
 
 import sys, time, os
 
+# Registering main root path for sane building!
+sys.path.append(os.path.dirname(__file__))
+
 from threads.updater import *
 from modules.utility import printLog
 from entities.layout import *

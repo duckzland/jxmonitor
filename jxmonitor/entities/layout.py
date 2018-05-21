@@ -1,5 +1,4 @@
-import os, sys, urwid, json
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+import urwid, json
 
 from widgets.summary import Summary
 from widgets.logger import Logger
