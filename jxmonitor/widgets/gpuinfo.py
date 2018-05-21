@@ -125,7 +125,7 @@ class GPUInfo(Widget):
 
 
     def flattenGPU(self, data):
-        GPU = {}
+        GPU = OrderedDict()
         if data and len(data) > 0:
             for keyword, value in data.iteritems():
 
@@ -193,5 +193,6 @@ class GPUInfo(Widget):
                     GPU[index]['watt'] = value
                     GPU[index]['type'] = type
                     GPU[index]['index'] = index
-    
+
+        OrderedDict(sorted(GPU.items(), key=lambda item: item[1][0]['index']))
         return GPU
