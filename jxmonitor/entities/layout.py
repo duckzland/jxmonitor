@@ -111,7 +111,7 @@ class LayoutView(urwid.WidgetWrap):
         if not 'gpuinfo' in self.contentWidgets:
             self.contentWidgets['gpuinfo'] = Logger(self, self.data, 'miner:logs:gpu:0')
 
-        for logKey in ['miner:logs:cpu', 'miner:logs:gpu:1']:
+        for logKey in ['miner:logs:gpu:1', 'miner:logs:cpu', 'serverlog']:
             if not logKey in self.contentWidgets:
                 if self.data and logKey in self.data:
                     self.contentWidgets[logKey] = Logger(self, self.data, logKey)

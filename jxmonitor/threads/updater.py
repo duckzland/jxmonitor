@@ -28,10 +28,11 @@ class Updater(Thread):
     def update(self, runner):
         retries = 3
         try:
-            self.transfer.send('serverStatus')
+            self.transfer.send('server:status')
         except:
             self.connection = False
             self.transfer = False
+
         finally:
             if self.active:
                 try:
@@ -44,7 +45,7 @@ class Updater(Thread):
                     if self.transfer == False:
                         if self.connection != False:
                             self.transfer = Transfer(self.connection)
-                            self.transfer.send('getStatus')
+                            self.transfer.send('monitor:server')
 
                     self.buffers = ''
                     if self.transfer != False:

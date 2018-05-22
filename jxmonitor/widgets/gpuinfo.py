@@ -53,9 +53,9 @@ class GPUInfo(Widget):
                 self.layouts['gpu:row:%s:separator' % (unit['index'])] = [self.divider]
 
         self.layouts['gpu:temperature'] = [urwid.Columns([
-            ('fixed', 7, urwid.Text('High : ')), ('fixed', 4, self.maps['temperature:highest']), ('fixed', 3, urwid.Text(' | ')),
-            ('fixed', 6, urwid.Text('Avg  : ')),  ('fixed', 4, self.maps['temperature:average']), ('fixed', 3, urwid.Text(' | ')),
-            ('fixed', 8, urwid.Text('Watt : ')), ('fixed', 4, self.maps['gpu:total_watt']),
+            ('fixed', 7, urwid.Text('High : ')), ('fixed', 3, self.maps['temperature:highest']), ('fixed', 3, urwid.Text(' | ')),
+            ('fixed', 7, urwid.Text('Avg  : ')),  ('fixed', 3, self.maps['temperature:average']), ('fixed', 3, urwid.Text(' | ')),
+            ('fixed', 7, urwid.Text('Watt : ')), ('fixed', 7, self.maps['gpu:total_watt']),
         ])]
 
         self.frameWidget()

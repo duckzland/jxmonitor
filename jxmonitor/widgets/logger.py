@@ -11,7 +11,8 @@ class Logger(Widget):
         self.headers = {
             'miner:logs:gpu:0': 'Primary GPU Miner',
             'miner:logs:gpu:1': 'Secondary GPU Miner',
-            'miner:logs:cpu': 'Primary CPU Miner'
+            'miner:logs:cpu': 'Primary CPU Miner',
+            'serverlog': 'Server Logs'
         }
 
         self.keywords = [
