@@ -135,63 +135,63 @@ class GPUInfo(Widget):
                 if 'gpu:fan' in keyword:
                     gpu, fan, type, index = keyword.split(':')
                     if index not in GPU:
-                        GPU[int(index)] = {}
-    
-                    GPU[int(index)]['fan'] = value
-                    GPU[int(index)]['type'] = type
-                    GPU[int(index)]['index'] = index
-    
+                        GPU[index] = {}
+
+                    GPU[index]['fan'] = value
+                    GPU[index]['type'] = type
+                    GPU[index]['index'] = index
+
                 if 'gpu:temperature' in keyword:
                     gpu, temperature, type, index = keyword.split(':')
                     if index not in GPU:
-                        GPU[int(index)] = {}
-    
-                    GPU[int(index)]['temperature'] = value
-                    GPU[int(index)]['type'] = type
-                    GPU[int(index)]['index'] = index
-    
-    
+                        GPU[index] = {}
+
+                    GPU[index]['temperature'] = value
+                    GPU[index]['type'] = type
+                    GPU[index]['index'] = index
+
+
                 if 'gpu:memory' in keyword:
                     gpu, memory, type, index = keyword.split(':')
-    
+
                     if index not in GPU:
-                        GPU[int(index)] = {}
-    
-                    GPU[int(index)]['memory'] = value
-                    GPU[int(index)]['type'] = type
-                    GPU[int(index)]['index'] = index
-    
-    
+                        GPU[index] = {}
+
+                    GPU[index]['memory'] = value
+                    GPU[index]['type'] = type
+                    GPU[index]['index'] = index
+
+
                 if 'gpu:core' in keyword:
                     gpu, core, type, index = keyword.split(':')
-    
+
                     if index not in GPU:
-                        GPU[int(index)] = {}
-    
-                    GPU[int(index)]['core'] = value
-                    GPU[int(index)]['type'] = type
-                    GPU[int(index)]['index'] = index
-    
-    
+                        GPU[index] = {}
+
+                    GPU[index]['core'] = value
+                    GPU[index]['type'] = type
+                    GPU[index]['index'] = index
+
+
                 if 'gpu:power' in keyword:
                     gpu, power, type, index = keyword.split(':')
-    
+
                     if index not in GPU:
-                        GPU[int(index)] = {}
-    
-                    GPU[int(index)]['power'] = value
-                    GPU[int(index)]['type'] = type
-                    GPU[int(index)]['index'] = index
-    
-    
+                        GPU[index] = {}
+
+                    GPU[index]['power'] = value
+                    GPU[index]['type'] = type
+                    GPU[index]['index'] = index
+
+
                 if 'gpu:watt' in keyword:
                     gpu, power, type, index = keyword.split(':')
-    
-                    if index not in GPU:
-                        GPU[int(index)] = {}
-    
-                    GPU[int(index)]['watt'] = value
-                    GPU[int(index)]['type'] = type
-                    GPU[int(index)]['index'] = index
 
-        return OrderedDict(sorted(GPU.items()))
+                    if index not in GPU:
+                        GPU[index] = {}
+
+                    GPU[index]['watt'] = value
+                    GPU[index]['type'] = type
+                    GPU[index]['index'] = index
+
+        return OrderedDict(sorted(GPU.items(), key=lambda k: int(k)))
