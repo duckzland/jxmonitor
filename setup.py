@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "jxmonitor",
-    version = "0.1-alpha",
+    version = "0.2-alpha",
     author = "Jason Xie",
     author_email = "jason.xie@victheme.com",
     description = "Python script for monitoring JXMiner via TUI",
@@ -11,7 +11,8 @@ setup(
     package_dir={'jxmonitor' : 'jxmonitor'},
     include_package_data=True,
     install_requires=[
-        'urwid'
+        'urwid',
+        'setuptools'
     ],
     entry_points = {
         'console_scripts' : ['jxmonitor = jxmonitor.jxmonitor:main']
