@@ -194,4 +194,4 @@ class GPUInfo(Widget):
                     GPU[index]['type'] = type
                     GPU[index]['index'] = index
 
-        return OrderedDict(sorted(GPU.items(), key=lambda k: int(k)))
+        return OrderedDict(sorted(GPU.items(), key=lambda k: int(k[0])))
