@@ -4,6 +4,7 @@ from widgets.summary import Summary
 from widgets.logger import Logger
 from widgets.gpuinfo import GPUInfo
 from modules.utility import printLog
+from modules.scrollable import ScrollBar, Scrollable
 from collections import OrderedDict
 
 class LayoutView(urwid.WidgetWrap):
@@ -51,8 +52,10 @@ class LayoutView(urwid.WidgetWrap):
                 temp = json.loads(data.replace('\n', '\\n').replace('\r', '\\r'), strict=False)
             else:
                 temp = data
+
         except:
             pass
+
         finally:
             if self.data != temp:
                 self.data = temp
@@ -101,9 +104,10 @@ class LayoutView(urwid.WidgetWrap):
                         widgets.append(element)
 
             if not self.sidebarBlock:
-                self.sidebarBlock =  urwid.SimpleListWalker(widgets)
+                self.sidebarBlock =  urwid.SimpleFocusListWalker(widgets)
             else:
                 self.sidebarBlock[:] = widgets
+
 
 
 
@@ -124,7 +128,7 @@ class LayoutView(urwid.WidgetWrap):
                         widgets.append(element)
 
             if not self.contentBlock:
-                self.contentBlock = urwid.SimpleListWalker(widgets)
+                self.contentBlock = urwid.SimpleFocusListWalker(widgets)
             else:
                 self.contentBlock[:] = widgets
 
@@ -134,13 +138,18 @@ class LayoutView(urwid.WidgetWrap):
         separator = urwid.AttrWrap( urwid.SolidFill(u'\u2502'), 'line')
         self.layout()
 
-        window = urwid.Columns([
-            ('fixed', 44, urwid.ListBox(self.sidebarBlock)),
-            ('fixed', 1, separator),
-            ('weight', 2, urwid.ListBox(self.contentBlock)),
-        ],
-        dividechars=1,
-        focus_column=1)
+        if self.controller.singleColumn:
+            window = urwid.Pile(
+                [urwid.ListBox(self.sidebarBlock), urwid.ListBox(self.contentBlock)]
+            )
+        else:
+            window = urwid.Columns([
+                ('fixed', 44, urwid.ListBox(self.sidebarBlock)),
+                ('fixed', 1, separator),
+                ('weight', 2, urwid.ListBox(self.contentBlock)),
+            ],
+            dividechars=1,
+            focus_column=1)
 
         window = urwid.Padding(window, ('fixed left', 1), ('fixed right', 1))
         window = urwid.AttrWrap(window, 'body')
@@ -151,9 +160,10 @@ class LayoutView(urwid.WidgetWrap):
 
 class Layout:
 
-    def __init__(self):
+    def __init__(self, singleColumn = False):
         self.viewReady = False
         self.loopReady = False
+        self.singleColumn = singleColumn
 
 
 

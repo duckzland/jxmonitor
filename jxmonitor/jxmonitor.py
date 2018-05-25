@@ -3,7 +3,7 @@
 # Main Miner Monitoring
 #####
 
-import sys, time, os
+import sys, time, os, getopt, signal
 
 # Registering main root path for sane building!
 sys.path.append(os.path.dirname(__file__))
@@ -13,6 +13,14 @@ from modules.utility import printLog
 from entities.layout import *
 from entities.threads import *
 
+def usage():
+    print 'jxmonitor -s|-h|-v'
+    print '   -s    Display the monitor in a single column'
+    print '   -h    Prints this help message'
+    print '   -v    Prints the server version'
+
+def version():
+    print "0.3.1"
 
 def main():
 
@@ -20,8 +28,34 @@ def main():
     global UpdaterThread
     global MainLayout
 
+    # Setup tools dont allow argument
+    argv = sys.argv[1:]
+
     try:
-        MainLayout = Layout()
+        opts, args = getopt.getopt(argv,"hi:si:vi")
+
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+
+    singleColumn = False
+    for opt, arg in opts:
+        if opt == '-h':
+            usage()
+            sys.exit()
+
+        if opt == '-v':
+            version()
+            sys.exit()
+
+        if opt == '-s':
+            singleColumn = True
+
+    signal.signal(signal.SIGINT, shutdown)
+    signal.signal(signal.SIGTERM, shutdown)
+
+    try:
+        MainLayout = Layout(singleColumn)
         JobThreads = Threads()
         JobThreads.add('updater', Updater(MainLayout))
 

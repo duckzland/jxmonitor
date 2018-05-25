@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = "jxmonitor",
-    version = "0.3.0",
+    version = "0.3.1",
     author = "Jason Xie",
     author_email = "jason.xie@victheme.com",
     description = "Python script for monitoring JXMiner via TUI",
