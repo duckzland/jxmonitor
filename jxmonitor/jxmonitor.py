@@ -17,7 +17,7 @@ def usage():
     print 'jxmonitor -s|-h|-v'
     print '   -s    Display the monitor in a single column'
     print '   -h    Prints this help message'
-    print '   -v    Prints the server version'
+    print '   -v    Prints the jxmonitor version'
 
 def version():
     print "0.3.1"
