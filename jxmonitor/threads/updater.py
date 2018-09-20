@@ -58,14 +58,13 @@ class Updater(Thread):
                                 raise
 
                         self.buffers = packet
-
                     self.updateLayout(self.buffers)
 
                 except:
                     self.connection = False
                     self.transfer = False
                     self.updateLayout('')
-                    time.sleep(10)
+                    time.sleep(5)
 
 
 

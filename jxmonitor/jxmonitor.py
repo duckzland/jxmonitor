@@ -8,9 +8,9 @@ import sys, time, os, getopt, signal
 # Registering main root path for sane building!
 sys.path.append(os.path.dirname(__file__))
 
-from threads.updater import *
-from modules.utility import printLog
-from entities.layout import *
+from threads.updater  import *
+from modules.utility  import printLog
+from entities.layout  import *
 from entities.threads import *
 
 def usage():
@@ -20,7 +20,7 @@ def usage():
     print '   -v    Prints the jxmonitor version'
 
 def version():
-    print "0.3.1"
+    print "0.3.2"
 
 def main():
 
@@ -78,8 +78,11 @@ def shutdown():
     try:
         MainLayout.destroy()
         status = 'success'
-    except:
+
+    except Exception as e:
+        printLog(str(e), 'error')
         status = 'error'
+
     finally:
         printLog("Closing interface", status)
 
@@ -87,8 +90,11 @@ def shutdown():
         JobThreads.destroy()
         JobThreads.clean()
         status = 'success'
-    except:
+
+    except Exception as e:
+        printLog(str(e), 'error')
         status = 'error'
+
     finally:
         printLog("Closing open threads", status)
 
