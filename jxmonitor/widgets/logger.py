@@ -1,5 +1,7 @@
 import os, sys, re
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from colorclass.parse import parse_input
 from collections import OrderedDict
 from pprint import pprint
 from kitchen.text.converters import getwriter
@@ -36,6 +38,7 @@ class Logger(Widget):
     def processText(self, text):
         if isinstance(text, str):
             return text
+
         try:
             text = ''.join(text)
             text = re.sub(r'\[\d+\-\d+\-\d+ \d+:\d+:\d+\]', '-', text)
@@ -43,12 +46,12 @@ class Logger(Widget):
             # Ethminer special text
             text = re.sub(r'(?:  m | cu )', '+', text)
             text = re.sub(r'\d+:\d+:\d+\|\w+\|  ', '', text)
-            try:
-                text = self.printText(text)
-            except Exception as e:
-                print e
-        except:
-            pass
+
+            text = parse_input(text, False, True)[0]
+            text = self.printText(text)
+
+        except Exception as e:
+            print e
 
         return text
         
@@ -92,6 +95,7 @@ class Logger(Widget):
                 if i == '':
                     i = '0'
                 list_attr.append(int(i))
+
             list_attr.sort()
             fg = -1
             bg = -1
@@ -116,6 +120,7 @@ class Logger(Widget):
 
             if fg < 0:
                 fgcolor = 'black'
+
             if bg < 0:
                 bgcolor = 'white'
 

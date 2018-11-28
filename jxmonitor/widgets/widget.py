@@ -59,6 +59,7 @@ class Widget:
 
         if format:
             text = str(format % (value))
+
         else:
             text = value
 
@@ -78,13 +79,8 @@ class Widget:
             value = element.get('default', 'N/A')
             if self.data:
                 value = self.data.get(element.get('key'), value)
+
             self.process(element.get('key'), value, element)
-
-
-        #for keyword, value in self.data.iteritems():
-        #    for element in self.keywords:
-        #         if element.get('key') == keyword:
-        #             self.process(keyword, value, element)
 
 
 
@@ -119,6 +115,7 @@ class Widget:
             rows = [('fixed', 8, urwid.Text(subTitle) )] + rows
             if divider:
                 w.append(self.divider)
+
             w.append(urwid.Columns(headers))
             w.append(urwid.Columns(rows))
         return w

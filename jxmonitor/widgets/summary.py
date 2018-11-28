@@ -82,6 +82,7 @@ class Summary(Widget):
 
                 if 'fan:speed' in keyword:
                     self.keywords.append({ 'key' : keyword, 'default': '0.00', 'format': '%s%%', 'process': [ float, int ] })
+
             self.isDynamicRegistered = True
             self.mapping()
             
@@ -98,4 +99,5 @@ class Summary(Widget):
                     value = float(n) / prefix[s]
                     return '%.1f%s' % (value, s)
                 except: pass
+
         return "%sB" % n
