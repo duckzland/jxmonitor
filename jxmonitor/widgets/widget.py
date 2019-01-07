@@ -71,7 +71,7 @@ class Widget:
                 self.maps[keyword].set_text(text)
             else:
                 self.maps[keyword] = urwid.Text(text)
-
+                self.maps[keyword].pack((8,))
 
 
     def update(self):
@@ -131,6 +131,7 @@ class Widget:
             if row:
                 for r in row:
                     c.append(r)
+
         c.append(urwid.Divider())
 
         p = urwid.Pile(c)

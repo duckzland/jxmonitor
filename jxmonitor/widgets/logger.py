@@ -25,6 +25,7 @@ class Logger(Widget):
         
     def layout(self):
         self.layouts = OrderedDict()
+
         self.layouts['logger:box:' + self.type] = [
             urwid.Text(self.headers[self.type]),
             self.divider,
