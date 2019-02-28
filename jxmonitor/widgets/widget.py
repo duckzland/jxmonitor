@@ -52,26 +52,30 @@ class Widget:
         color       = element.get('color', 'widget_value')
         format      = element.get('format', '%s')
         processors  = element.get('process', [])
+        values      = []
+
+        if not keyword in self.maps:
+            self.maps[keyword] = urwid.Text('')
+            self.maps[keyword].pack((8,))
 
         if len(processors) > 0:
             for process in processors:
                 value = process(value)
+                if not value:
+                    break
 
-        if format:
-            text = str(format % (value))
-
-        else:
+        if value:
             text = value
+            if format:
+                text = str(format % (value))
 
-        if color:
-            text = (color, text)
-
-        if text:
-            if keyword in self.maps:
-                self.maps[keyword].set_text(text)
             else:
-                self.maps[keyword] = urwid.Text(text)
-                self.maps[keyword].pack((8,))
+                text = value
+
+            if color:
+                text = (color, text)
+
+            self.maps[keyword].set_text(text)
 
 
     def update(self):
@@ -80,7 +84,8 @@ class Widget:
             if self.data:
                 value = self.data.get(element.get('key'), value)
 
-            self.process(element.get('key'), value, element)
+            if value:
+               self.process(element.get('key'), value, element)
 
 
 

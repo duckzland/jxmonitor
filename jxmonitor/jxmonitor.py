@@ -20,7 +20,7 @@ def usage():
     print '   -v    Prints the jxmonitor version'
 
 def version():
-    print "0.3.5"
+    print "0.3.6"
 
 def main():
 

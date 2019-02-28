@@ -21,6 +21,8 @@ class Logger(Widget):
         self.keywords = [
             { 'key'    : self.type, 'default': 'Not initialized', 'color': False, 'format': False, 'process': [ self.processText ] },
         ]
+
+        self.buffers = [];
         
         
     def layout(self):
@@ -37,19 +39,34 @@ class Logger(Widget):
 
 
     def processText(self, text):
-        if isinstance(text, str):
-            return text
+
+        if self.type == 'serverlog':
+            text = text.splitlines()
+
+        if not isinstance(text, list):
+            return False
 
         try:
-            text = ''.join(text)
-            text = re.sub(r'\[\d+\-\d+\-\d+ \d+:\d+:\d+\]', '-', text)
+            total = len(text);
+            if total < 11:
+                for i in range(11 - total):
+                    text.append("\n")
 
-            # Ethminer special text
-            text = re.sub(r'(?:  m | cu )', '+', text)
-            text = re.sub(r'\d+:\d+:\d+\|\w+\|  ', '', text)
+            for i, t in enumerate(text):
 
-            text = parse_input(text, False, True)[0]
-            text = self.printText(text)
+                t = re.sub(r'\[\d+\-\d+\-\d+ \d+:\d+:\d+\]', '-', t)
+                t = t.strip()
+
+                # Ethminer special text
+                t = re.sub(r'(?:  m | cu )', '+', t)
+                t = re.sub(r'\d+:\d+:\d+\|\w+\|  ', '', t)
+
+                # Convert VT100 to Urwid color
+                t = parse_input(t, False, True)[0]
+                t = self.printText(t)
+
+                t.append('\n')
+                text[i] = t
 
         except Exception as e:
             print e
@@ -77,82 +94,92 @@ class Logger(Widget):
             'light cyan',
             'white'
         ]
-    
+
+        # Ugly, find a way to match VT100 plus the string using regex!
+        ansi_regex = '(\x1b\[|\x9b)[^@-_]*[@-_]|\x1b[@-_]'
+        ansi_escape = re.compile(ansi_regex, flags=re.IGNORECASE)
+
         formated_text = []
-        UTF8Writer = getwriter('utf8')
-        raw_text = UTF8Writer(raw_text)
-    
-        for at in raw_text.split("\x1b["):
-            try:
-                attr, text = at.split("m",1)
-            except:
-                attr = '0'
-                text = at.split("m",1)
+        if ansi_escape.findall(raw_text):
 
-            list_attr = []
-            for i in attr.split(';'):
-                i = re.sub("[^0-9]", "", i)
-                i = i.lstrip('0')
-                if i == '':
-                    i = '0'
-                list_attr.append(int(i))
+            UTF8Writer = getwriter('utf8')
+            raw_text = UTF8Writer(raw_text)
 
-            list_attr.sort()
-            fg = -1
-            bg = -1
+            # This is dumb!, prone to error, find a better way!
+            for at in raw_text.split("\x1b["):
 
-            for elem in list_attr:
-                if elem <= 29:
-                    pass
-                elif elem <= 37:
-                    fg = elem - 30
-                elif elem <= 47:
-                    bg = elem - 40
-                elif elem <= 94:
-                    fg = fg + 8
-                elif elem >= 100 and elem <= 104:
-                    bg = bg + 8
+                try:
+                    attr, text = at.split("m",1)
+                except:
+                    attr = '0'
+                    text = at.split("m",1)
 
-            if color_list[fg]:
-                fgcolor = color_list[fg]
+                list_attr = []
+                for i in attr.split(';'):
+                    i = re.sub("[^0-9]", "", i)
+                    i = i.lstrip('0')
+                    if i == '':
+                        i = '0'
+                    list_attr.append(int(i))
 
-            if color_list[bg]:
-                bgcolor = color_list[bg]
+                list_attr.sort()
+                fg = -1
+                bg = -1
 
-            if fg < 0:
-                fgcolor = 'black'
+                for elem in list_attr:
+                    if elem <= 29:
+                        pass
+                    elif elem <= 37:
+                        fg = elem - 30
+                    elif elem <= 47:
+                        bg = elem - 40
+                    elif elem <= 94:
+                        fg = fg + 8
+                    elif elem >= 100 and elem <= 104:
+                        bg = bg + 8
 
-            if bg < 0:
-                bgcolor = 'white'
+                if color_list[fg]:
+                    fgcolor = color_list[fg]
 
-            if list_attr == [0]:
-                fgcolor = 'black'
-                bgcolor = 'white'
+                if color_list[bg]:
+                    bgcolor = color_list[bg]
 
-            if fgcolor == 'white':
-                fgcolor = 'black'
+                if fg < 0:
+                    fgcolor = 'black'
 
-            if fgcolor == 'light gray':
-                fgcolor = 'dark gray'
+                if bg < 0:
+                    bgcolor = 'white'
 
-            if bgcolor == 'black':
-                bgcolor = 'white'
+                if list_attr == [0]:
+                    fgcolor = 'black'
+                    bgcolor = 'white'
 
-            if 'light' in fgcolor:
-                fgcolor = fgcolor.replace('light', 'dark')
+                if fgcolor == 'white':
+                    fgcolor = 'black'
 
-            if fgcolor not in color_list:
-                fgcolor = 'black'
+                if fgcolor == 'light gray':
+                    fgcolor = 'dark gray'
 
-            if bgcolor not in color_list:
-                fgcolor = 'white'
+                if bgcolor == 'black':
+                    bgcolor = 'white'
 
-            if not text:
-                fgcolor = 'black'
-                bgcolor = 'white'
-                text = at
+                if 'light' in fgcolor:
+                    fgcolor = fgcolor.replace('light', 'dark')
 
-            formated_text.append((urwid.AttrSpec(fgcolor, bgcolor), text))
+                if fgcolor not in color_list:
+                    fgcolor = 'black'
+
+                if bgcolor not in color_list:
+                    fgcolor = 'white'
+
+                if not text:
+                    fgcolor = 'black'
+                    bgcolor = 'white'
+                    text = at
+
+                formated_text.append((urwid.AttrSpec(fgcolor, bgcolor), text))
+        else :
+            formated_text.append((urwid.AttrSpec('black', 'white'), raw_text))
     
         return formated_text
                 
