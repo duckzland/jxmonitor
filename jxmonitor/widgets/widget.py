@@ -52,7 +52,6 @@ class Widget:
         color       = element.get('color', 'widget_value')
         format      = element.get('format', '%s')
         processors  = element.get('process', [])
-        values      = []
 
         if not keyword in self.maps:
             self.maps[keyword] = urwid.Text('')

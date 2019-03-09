@@ -8,10 +8,10 @@ import sys, time, os, getopt, signal
 # Registering main root path for sane building!
 sys.path.append(os.path.dirname(__file__))
 
-from threads.updater  import *
-from modules.utility  import printLog
-from entities.layout  import *
-from entities.threads import *
+from threads  import *
+from modules  import *
+from entities import *
+
 
 def usage():
     print 'jxmonitor -s|-h|-v'
@@ -19,8 +19,10 @@ def usage():
     print '   -h    Prints this help message'
     print '   -v    Prints the jxmonitor version'
 
+
 def version():
-    print "0.3.6"
+    print "0.3.7"
+
 
 def main():
 
