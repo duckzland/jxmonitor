@@ -1,9 +1,8 @@
 import pickle, io, select, time, socket, json
 
-from entities.job import *
-from thread import Thread
-from modules.transfer import *
-from modules.utility import printLog
+from entities import *
+from thread import *
+from modules import *
 
 class Updater(Thread):
 

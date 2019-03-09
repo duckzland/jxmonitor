@@ -1,8 +1,7 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from pprint import pprint
-#from modules.utility import flattenGPU
-import modules.utility as Utility
+from modules import *
 from widget import *
 from collections import OrderedDict
 
@@ -88,7 +87,6 @@ class GPUInfo(Widget):
         # GPU Related Info
         GPU = self.flattenGPU(self.data)
         for index, unit in GPU.iteritems():
-            keyword = 'GPU:%s' % (unit['index'])
             self.processGPU(unit)
                         
                         
@@ -97,29 +95,9 @@ class GPUInfo(Widget):
     def processGPU(self, unit):
         keyword = 'GPU:%s' % (unit['index'])
         for element in self.keywords:
-            if element.get('key') == keyword + ':index':
-                self.process(keyword + ':index', unit['index'], element)
-                
-            if element.get('key') == keyword + ':type':
-                self.process(keyword + ':type', unit['type'], element)
-                
-            if element.get('key') == keyword + ':temperature':
-                self.process(keyword + ':temperature', unit['temperature'], element)
-                
-            if element.get('key') == keyword + ':fan':
-                self.process(keyword + ':fan', unit['fan'], element)
-                
-            if element.get('key') == keyword + ':core':
-                self.process(keyword + ':core', unit['core'], element)
-                
-            if element.get('key') == keyword + ':memory':
-                self.process(keyword + ':memory', unit['memory'], element)
-                
-            if element.get('key') == keyword + ':power':
-                self.process(keyword + ':power', unit['power'], element)
-                
-            if element.get('key') == keyword + ':watt':
-                self.process(keyword + ':watt', unit['watt'], element)
+            for x in ['index', 'type', 'temperature', 'fan', 'core', 'memory', 'power', 'watt']:
+                if element.get('key') == '%s:%s' % (keyword, x):
+                    self.process('%s:%s' % (keyword, x), unit[x], element)
                 
 
 
@@ -153,7 +131,6 @@ class GPUInfo(Widget):
 
                 if 'gpu:memory' in keyword:
                     gpu, memory, type, index = keyword.split(':')
-
                     if index not in GPU:
                         GPU[index] = {}
 
@@ -164,7 +141,6 @@ class GPUInfo(Widget):
 
                 if 'gpu:core' in keyword:
                     gpu, core, type, index = keyword.split(':')
-
                     if index not in GPU:
                         GPU[index] = {}
 
@@ -175,7 +151,6 @@ class GPUInfo(Widget):
 
                 if 'gpu:power' in keyword:
                     gpu, power, type, index = keyword.split(':')
-
                     if index not in GPU:
                         GPU[index] = {}
 
@@ -186,7 +161,6 @@ class GPUInfo(Widget):
 
                 if 'gpu:watt' in keyword:
                     gpu, power, type, index = keyword.split(':')
-
                     if index not in GPU:
                         GPU[index] = {}
 

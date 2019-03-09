@@ -107,7 +107,6 @@ class Logger(Widget):
 
             # This is dumb!, prone to error, find a better way!
             for at in raw_text.split("\x1b["):
-
                 try:
                     attr, text = at.split("m",1)
                 except:
@@ -173,6 +172,10 @@ class Logger(Widget):
                     fgcolor = 'white'
 
                 if not text:
+                    # 0m is VT100 reset code
+                    if at == '0m':
+                        continue;
+
                     fgcolor = 'black'
                     bgcolor = 'white'
                     text = at

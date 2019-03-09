@@ -1,9 +1,7 @@
 import urwid, json
 
-from widgets.summary import Summary
-from widgets.logger import Logger
-from widgets.gpuinfo import GPUInfo
-from modules.utility import printLog
+from widgets import *
+from modules import *
 from collections import OrderedDict
 
 class LayoutView(urwid.WidgetWrap):
