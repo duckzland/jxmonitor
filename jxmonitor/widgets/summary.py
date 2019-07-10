@@ -46,10 +46,13 @@ class Summary(Widget):
             self.divider,
         ]
 
-        self.layouts['gpu:1:info'] = self.doubleColumn('GPU 1 : ', 'general:active:gpu:coin', 'general:active:gpu:pool')
-        self.layouts['gpu:1:stat'] = self.doubleColumn('Stats : ', 'miner:hashrate:gpu:0', 'miner:shares:gpu:0')
-
         if self.data:
+            if 'general:active:gpu:coin' in self.data and 'general:active:gpu:pool' in self.data:
+                self.layouts['gpu:1:info'] = self.doubleColumn('GPU 1 : ', 'general:active:gpu:coin', 'general:active:gpu:pool')
+
+            if 'miner:hashrate:gpu:0' in self.data and 'miner:shares:gpu:0' in self.data:
+                self.layouts['gpu:1:stat'] = self.doubleColumn('Stats : ', 'miner:hashrate:gpu:0', 'miner:shares:gpu:0')
+
             if 'general:active:gpu:second_coin' in self.data and 'general:active:gpu:second_pool' in self.data:
                 self.layouts['gpu:2:info'] = self.doubleColumn('GPU 2 : ', 'general:active:gpu:second_coin' , 'general:active:gpu:second_pool')
 

@@ -109,13 +109,21 @@ class LayoutView(urwid.WidgetWrap):
 
 
     def contentColumn(self):
+
+        # This is weird if we dont add this here the rest of the box wont show
+        # to circumvent this we add this first then remove it later if no gpuinfo available
         if not 'gpuinfo' in self.contentWidgets:
             self.contentWidgets['gpuinfo'] = Logger(self, self.data, 'miner:logs:gpu:0')
 
-        for logKey in ['miner:logs:gpu:1', 'miner:logs:cpu', 'serverlog']:
+        for logKey in [ 'miner:logs:gpu:1', 'miner:logs:cpu', 'serverlog']:
             if not logKey in self.contentWidgets:
                 if self.data and logKey in self.data:
                     self.contentWidgets[logKey] = Logger(self, self.data, logKey)
+
+        # force remove the gpu box if no gpuinfo available
+        if self.data and not 'miner:logs:gpu:0' in self.data:
+            del self.contentWidgets['gpuinfo']
+
 
         if self.contentWidgets:
             widgets = []

@@ -21,7 +21,7 @@ def usage():
 
 
 def version():
-    print "0.3.7"
+    print "0.3.8"
 
 
 def main():

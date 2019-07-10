@@ -20,44 +20,46 @@ class GPUInfo(Widget):
 
     def layout(self):
         self.registerGPU()
-        self.layouts = OrderedDict()
-        self.layouts['gpu:header'] = [urwid.Columns([
-            ('fixed', 10, urwid.Text('GPU Unit')),
-            ('fixed', 5, urwid.Text('Temp')),
-            ('fixed', 5, urwid.Text('Fan')),
-            ('fixed', 5, urwid.Text('Core')),
-            ('fixed', 5, urwid.Text('Mem')),
-            ('fixed', 5, urwid.Text('Pwr')),
-            ('fixed', 5, urwid.Text('Watt')),
-        ])]
 
-        self.layouts['gpu:separator:top'] = [self.divider]
+        if len(self.GPU) > 0:
+            self.layouts = OrderedDict()
+            self.layouts['gpu:header'] = [urwid.Columns([
+                ('fixed', 10, urwid.Text('GPU Unit')),
+                ('fixed', 5, urwid.Text('Temp')),
+                ('fixed', 5, urwid.Text('Fan')),
+                ('fixed', 5, urwid.Text('Core')),
+                ('fixed', 5, urwid.Text('Mem')),
+                ('fixed', 5, urwid.Text('Pwr')),
+                ('fixed', 5, urwid.Text('Watt')),
+            ])]
 
-        if self.GPU and len(self.GPU) > 0:
-            for index, unit in self.GPU.iteritems():
-                keyword = 'GPU:%s' % (unit['index'])
+            self.layouts['gpu:separator:top'] = [self.divider]
 
-                self.layouts['gpu:row:%s:content' % (unit['index'])] = [urwid.Columns([
-                    ('fixed', 6, self.maps[keyword + ':type']),
-                    ('fixed', 1, urwid.Text(':')),
-                    ('fixed', 3, self.maps[keyword + ':index']),
-                    ('fixed', 5, self.maps[keyword + ':temperature']),
-                    ('fixed', 5, self.maps[keyword + ':fan']),
-                    ('fixed', 5, self.maps[keyword + ':core']),
-                    ('fixed', 5, self.maps[keyword + ':memory']),
-                    ('fixed', 5, self.maps[keyword + ':power']),
-                    ('fixed', 5, self.maps[keyword + ':watt'])
-                ])]
+            if self.GPU and len(self.GPU) > 0:
+                for index, unit in self.GPU.iteritems():
+                    keyword = 'GPU:%s' % (unit['index'])
 
-                self.layouts['gpu:row:%s:separator' % (unit['index'])] = [self.divider]
+                    self.layouts['gpu:row:%s:content' % (unit['index'])] = [urwid.Columns([
+                        ('fixed', 6, self.maps[keyword + ':type']),
+                        ('fixed', 1, urwid.Text(':')),
+                        ('fixed', 3, self.maps[keyword + ':index']),
+                        ('fixed', 5, self.maps[keyword + ':temperature']),
+                        ('fixed', 5, self.maps[keyword + ':fan']),
+                        ('fixed', 5, self.maps[keyword + ':core']),
+                        ('fixed', 5, self.maps[keyword + ':memory']),
+                        ('fixed', 5, self.maps[keyword + ':power']),
+                        ('fixed', 5, self.maps[keyword + ':watt'])
+                    ])]
 
-        self.layouts['gpu:temperature'] = [urwid.Columns([
-            ('fixed', 7, urwid.Text('High : ')), ('fixed', 3, self.maps['temperature:highest']), ('fixed', 3, urwid.Text(' | ')),
-            ('fixed', 7, urwid.Text('Avg  : ')),  ('fixed', 3, self.maps['temperature:average']), ('fixed', 3, urwid.Text(' | ')),
-            ('fixed', 7, urwid.Text('Watt : ')), ('fixed', 7, self.maps['gpu:total_watt']),
-        ])]
+                    self.layouts['gpu:row:%s:separator' % (unit['index'])] = [self.divider]
 
-        self.frameWidget()
+            self.layouts['gpu:temperature'] = [urwid.Columns([
+                ('fixed', 7, urwid.Text('High : ')), ('fixed', 3, self.maps['temperature:highest']), ('fixed', 3, urwid.Text(' | ')),
+                ('fixed', 7, urwid.Text('Avg  : ')),  ('fixed', 3, self.maps['temperature:average']), ('fixed', 3, urwid.Text(' | ')),
+                ('fixed', 7, urwid.Text('Watt : ')), ('fixed', 7, self.maps['gpu:total_watt']),
+            ])]
+
+            self.frameWidget()
 
 
 
