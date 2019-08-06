@@ -7,12 +7,13 @@ from collections import OrderedDict
 class LayoutView(urwid.WidgetWrap):
 
     palette = [
-        ('body', 'black', 'light gray', 'standout'),
-        ('header', 'dark blue', 'white', 'bold'),
-        ('line', 'black', 'light gray', 'standout'),
-        ('widget_value', 'dark green', 'white', 'standout'),
-        ('widget_box', 'black', 'white', 'standout'),
-        ('widget_line', 'light gray', 'white', 'standout'),
+        ('body', 'light gray', 'black', 'standout'),
+        ('header', 'dark red', '', 'bold', '#f60', ''),
+        ('line', 'dark gray', '', 'standout'),
+        ('widget_value', 'white', '', 'standout'),
+        ('widget_label', 'light gray', '', 'standout'),
+        ('widget_box', 'dark red', 'black', 'standout', '#f60', ''),
+        ('widget_line', 'dark gray', 'black', 'standout'),
     ]
 
 
@@ -181,6 +182,7 @@ class Layout:
     def main(self):
         self.view.start()
         self.loop = urwid.MainLoop(self.view, self.view.palette)
+        self.loop.screen.set_terminal_properties(colors=256)
         self.loopReady = True
         self.loop.run()
 

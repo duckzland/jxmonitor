@@ -68,9 +68,6 @@ class Widget:
             if format:
                 text = str(format % (value))
 
-            else:
-                text = value
-
             if color:
                 text = (color, text)
 
@@ -94,9 +91,9 @@ class Widget:
             w.append(self.divider)
 
         w.append(urwid.Columns([
-            ('fixed', 8, urwid.Text(title)),
+            ('fixed', 8, urwid.Text(('widget_label', title))),
             ('fixed', 10, self.maps[firstKey]),
-            ('fixed', 3, urwid.Text(' | ')),
+            ('fixed', 3, urwid.Text(('widget_line', ' | '))),
             ('weight', 2, self.maps[secondKey]),
         ]))
         return w
@@ -111,17 +108,19 @@ class Widget:
             if testKey in keyword:
                 index = keyword.split(':')[int(headerKey)]
                 headingText = headerText % (index)
-                headers.append(('fixed', 6, urwid.Text(str(headingText).upper()) ))
+                headers.append(('fixed', 6, urwid.Text(('widget_label', str(headingText).upper()) ) ))
                 rows.append(('fixed', 6, urwidElement))
 
         if len(headers):
-            headers = [('fixed', 8, urwid.Text(title) )] + headers
-            rows = [('fixed', 8, urwid.Text(subTitle) )] + rows
+            headers = [('fixed', 8, urwid.Text(('widget_label', title)) )] + headers
+            rows = [('fixed', 8, urwid.Text(('widget_label', subTitle) ))] + rows
             if divider:
                 w.append(self.divider)
 
             w.append(urwid.Columns(headers))
+            w.append(self.divider)
             w.append(urwid.Columns(rows))
+
         return w
 
 
@@ -146,3 +145,7 @@ class Widget:
         self.frame.append(urwid.Divider())
         self.frame.append(p)
         self.frame.append(urwid.Divider())
+
+
+    def upperCase(self, text):
+        return text.upper()

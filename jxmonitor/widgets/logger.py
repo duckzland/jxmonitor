@@ -12,10 +12,10 @@ class Logger(Widget):
 
     def init(self):
         self.headers = {
-            'miner:logs:gpu:0': 'Primary GPU Miner',
-            'miner:logs:gpu:1': 'Secondary GPU Miner',
-            'miner:logs:cpu': 'Primary CPU Miner',
-            'serverlog': 'Server Logs'
+            'miner:logs:gpu:0': self.upperCase('Primary GPU Miner'),
+            'miner:logs:gpu:1': self.upperCase('Secondary GPU Miner'),
+            'miner:logs:cpu': self.upperCase('Primary CPU Miner'),
+            'serverlog': self.upperCase('Server Logs')
         }
 
         self.keywords = [
@@ -144,45 +144,45 @@ class Logger(Widget):
                     bgcolor = color_list[bg]
 
                 if fg < 0:
-                    fgcolor = 'black'
+                    fgcolor = 'white'
 
                 if bg < 0:
-                    bgcolor = 'white'
+                    bgcolor = 'black'
 
                 if list_attr == [0]:
                     fgcolor = 'black'
                     bgcolor = 'white'
 
-                if fgcolor == 'white':
-                    fgcolor = 'black'
+                if fgcolor == 'black':
+                    fgcolor = 'white'
 
                 if fgcolor == 'light gray':
                     fgcolor = 'dark gray'
 
-                if bgcolor == 'black':
-                    bgcolor = 'white'
+                if bgcolor == 'white':
+                    bgcolor = 'black'
 
-                if 'light' in fgcolor:
-                    fgcolor = fgcolor.replace('light', 'dark')
+                if 'dark' in fgcolor:
+                    fgcolor = fgcolor.replace('dark', 'light')
 
                 if fgcolor not in color_list:
-                    fgcolor = 'black'
+                    fgcolor = 'white'
 
                 if bgcolor not in color_list:
-                    fgcolor = 'white'
+                    fgcolor = 'black'
 
                 if not text:
                     # 0m is VT100 reset code
                     if at == '0m':
                         continue;
 
-                    fgcolor = 'black'
-                    bgcolor = 'white'
+                    fgcolor = 'white'
+                    bgcolor = 'black'
                     text = at
 
                 formated_text.append((urwid.AttrSpec(fgcolor, bgcolor), text))
         else :
-            formated_text.append((urwid.AttrSpec('black', 'white'), raw_text))
+            formated_text.append((urwid.AttrSpec('white', 'black'), raw_text))
     
         return formated_text
                 

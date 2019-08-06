@@ -9,7 +9,7 @@ class Summary(Widget):
 
     def init(self):
         self.keywords = [
-            { 'key'    : 'general:boxname', 'default': 'JXMiner', 'color': 'header' },
+            { 'key'    : 'general:boxname', 'default': 'JXMiner', 'color': 'header', 'process': [ self.upperCase ] },
             { 'key'    : 'general:active:gpu:coin' },
             { 'key'    : 'general:active:gpu:pool' },
             { 'key'    : 'miner:hashrate:gpu:0', 'default': '0' },

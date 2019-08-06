@@ -24,13 +24,13 @@ class GPUInfo(Widget):
         if len(self.GPU) > 0:
             self.layouts = OrderedDict()
             self.layouts['gpu:header'] = [urwid.Columns([
-                ('fixed', 10, urwid.Text('GPU Unit')),
-                ('fixed', 5, urwid.Text('Temp')),
-                ('fixed', 5, urwid.Text('Fan')),
-                ('fixed', 5, urwid.Text('Core')),
-                ('fixed', 5, urwid.Text('Mem')),
-                ('fixed', 5, urwid.Text('Pwr')),
-                ('fixed', 5, urwid.Text('Watt')),
+                ('fixed', 10, urwid.Text(('widget_label', 'GPU Unit'))),
+                ('fixed', 5, urwid.Text(('widget_label', 'Temp'))),
+                ('fixed', 5, urwid.Text(('widget_label', 'Fan'))),
+                ('fixed', 5, urwid.Text(('widget_label', 'Core'))),
+                ('fixed', 5, urwid.Text(('widget_label', 'Mem'))),
+                ('fixed', 5, urwid.Text(('widget_label', 'Pwr'))),
+                ('fixed', 5, urwid.Text(('widget_label', 'Watt'))),
             ])]
 
             self.layouts['gpu:separator:top'] = [self.divider]
@@ -41,7 +41,7 @@ class GPUInfo(Widget):
 
                     self.layouts['gpu:row:%s:content' % (unit['index'])] = [urwid.Columns([
                         ('fixed', 6, self.maps[keyword + ':type']),
-                        ('fixed', 1, urwid.Text(':')),
+                        ('fixed', 1, urwid.Text(('widget_label', ':'))),
                         ('fixed', 3, self.maps[keyword + ':index']),
                         ('fixed', 5, self.maps[keyword + ':temperature']),
                         ('fixed', 5, self.maps[keyword + ':fan']),
@@ -54,9 +54,9 @@ class GPUInfo(Widget):
                     self.layouts['gpu:row:%s:separator' % (unit['index'])] = [self.divider]
 
             self.layouts['gpu:temperature'] = [urwid.Columns([
-                ('fixed', 7, urwid.Text('High : ')), ('fixed', 3, self.maps['temperature:highest']), ('fixed', 3, urwid.Text(' | ')),
-                ('fixed', 7, urwid.Text('Avg  : ')),  ('fixed', 3, self.maps['temperature:average']), ('fixed', 3, urwid.Text(' | ')),
-                ('fixed', 7, urwid.Text('Watt : ')), ('fixed', 7, self.maps['gpu:total_watt']),
+                ('fixed', 7, urwid.Text(('widget_label', 'High : '))), ('fixed', 3, self.maps['temperature:highest']), ('fixed', 3, urwid.Text(('widget_line', ' | '))),
+                ('fixed', 7, urwid.Text(('widget_label', 'Avg  : '))),  ('fixed', 3, self.maps['temperature:average']), ('fixed', 3, urwid.Text(('widget_line', ' | '))),
+                ('fixed', 7, urwid.Text(('widget_label', 'Watt : '))), ('fixed', 7, self.maps['gpu:total_watt']),
             ])]
 
             self.frameWidget()
